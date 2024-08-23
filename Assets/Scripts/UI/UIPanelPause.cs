@@ -7,17 +7,20 @@ using UnityEngine.UI;
 public class UIPanelPause : MonoBehaviour, IMenu
 {
     [SerializeField] private Button btnClose;
+    [SerializeField] private Button btnRestart;
 
     private UIMainManager m_mngr;
 
     private void Awake()
     {
         btnClose.onClick.AddListener(OnClickClose);
+        btnRestart.onClick.AddListener(OnClickRestart);
     }
 
     private void OnDestroy()
     {
         if (btnClose) btnClose.onClick.RemoveAllListeners();
+        if (btnRestart) btnRestart.onClick.RemoveAllListeners();
     }
 
     public void Setup(UIMainManager mngr)
@@ -28,6 +31,20 @@ public class UIPanelPause : MonoBehaviour, IMenu
     private void OnClickClose()
     {
         m_mngr.ShowGameMenu();
+    }
+
+    private void OnClickRestart()
+    {
+        m_mngr.ClearLevel();
+        int levelMode = PlayerPrefs.GetInt(Constants.LEVEL_MODE);
+        if (levelMode == 0)
+        {
+            m_mngr.LoadLevelTimer();
+        }
+        else
+        {
+            m_mngr.LoadLevelMoves();
+        }
     }
 
     public void Show()

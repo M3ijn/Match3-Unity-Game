@@ -32,11 +32,13 @@ public class UIPanelMain : MonoBehaviour, IMenu
     private void OnClickTimer()
     {
         m_mngr.LoadLevelTimer();
+        PlayerPrefs.SetInt(Constants.LEVEL_MODE, 0);;
     }
 
     private void OnClickMoves()
     {
         m_mngr.LoadLevelMoves();
+        PlayerPrefs.SetInt(Constants.LEVEL_MODE, 1);
     }
 
     public void Show()

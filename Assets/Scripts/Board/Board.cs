@@ -145,9 +145,53 @@ public class Board
                 Cell cell = m_cells[x, y];
                 if (!cell.IsEmpty) continue;
 
+                NormalItem.eNormalType[] surroundingCellsType
+                    = new NormalItem.eNormalType[4];
+
+                int index = 0;
+                if (cell.NeighbourBottom)
+                {
+                    if (cell.NeighbourBottom.Item != null)
+                    {
+                        NormalItem itemNeighbour =
+                        (NormalItem)cell.NeighbourBottom.Item;
+                        surroundingCellsType[index] = itemNeighbour.ItemType;
+                        index++;
+                    }             
+                }
+                if (cell.NeighbourLeft)
+                {
+                    if (cell.NeighbourLeft.Item != null)
+                    {
+                        NormalItem itemNeighbour =
+                        (NormalItem)cell.NeighbourLeft.Item;
+                        surroundingCellsType[index] = itemNeighbour.ItemType;
+                        index++;
+                    }
+                }
+                if (cell.NeighbourRight)
+                {
+                    if (cell.NeighbourRight.Item != null)
+                    {
+                        NormalItem itemNeighbour =
+                        (NormalItem)cell.NeighbourRight.Item;
+                        surroundingCellsType[index] = itemNeighbour.ItemType;
+                        index++;
+                    }
+                }
+                if (cell.NeighbourUp)
+                {
+                    if (cell.NeighbourUp.Item != null)
+                    {
+                        NormalItem itemNeighbour =
+                        (NormalItem)cell.NeighbourUp.Item;
+                        surroundingCellsType[index] = itemNeighbour.ItemType;
+                    }
+                }
+
                 NormalItem item = new NormalItem();
 
-                item.SetType(Utils.GetRandomNormalType());
+                item.SetType(Utils.GetRandomNormalTypeWithSmallestAmountExcept(surroundingCellsType, GetNormnalTypeCount()));
                 item.SetView();
                 item.SetViewRoot(m_root);
 
@@ -155,6 +199,47 @@ public class Board
                 cell.ApplyItemPosition(true);
             }
         }
+    }
+
+    private int[] GetNormnalTypeCount()
+    {
+        int[] count = new int[] { 0, 0, 0, 0, 0, 0, 0};
+        for (int x = 0; x < boardSizeX; x++)
+        {
+            for (int y = 0; y < boardSizeY; y++)
+            {
+                Cell cell = m_cells[x, y];
+                if (!cell.IsEmpty) continue;
+                if (cell.Item == null) continue;
+
+                NormalItem item = (NormalItem)cell.Item;
+                switch (item.ItemType)
+                {
+                    case NormalItem.eNormalType.TYPE_ONE:
+                        count[0]++;
+                        break;
+                    case NormalItem.eNormalType.TYPE_TWO:
+                        count[1]++;
+                        break;
+                    case NormalItem.eNormalType.TYPE_THREE:
+                        count[2]++;
+                        break;
+                    case NormalItem.eNormalType.TYPE_FOUR:
+                        count[3]++;
+                        break;
+                    case NormalItem.eNormalType.TYPE_FIVE:
+                        count[4]++;
+                        break;
+                    case NormalItem.eNormalType.TYPE_SIX:
+                        count[5]++;
+                        break;
+                    case NormalItem.eNormalType.TYPE_SEVEN:
+                        count[6]++;
+                        break;
+                }
+            }
+        }
+        return count;
     }
 
     internal void ExplodeAllItems()

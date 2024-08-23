@@ -24,4 +24,25 @@ public class Utils
 
         return result;
     }
+
+    public static NormalItem.eNormalType GetRandomNormalTypeWithSmallestAmountExcept(NormalItem.eNormalType[] exceptTypes, int[] typeCounts)
+    {
+        List<NormalItem.eNormalType> list = Enum.GetValues(typeof(NormalItem.eNormalType)).Cast<NormalItem.eNormalType>().Except(exceptTypes).ToList();
+        List<int> count = typeCounts.ToList();
+        NormalItem.eNormalType result = NormalItem.eNormalType.TYPE_ONE;
+        int min = int.MaxValue;
+        for (int i = 0; i < count.Count; i++)
+        {
+            if (list.Contains((NormalItem.eNormalType)i))
+            {
+                if (count[i] < min)
+                {
+                    min = count[i];
+                    result = (NormalItem.eNormalType)i;
+                }
+            }
+        }
+
+        return result;
+    }
 }
